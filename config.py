@@ -1,10 +1,18 @@
 #config.py Nothing else hard-codes a number, a path, a model name
 #or a threshold. Change things here, nowhere else
 
+#Run this once 
+#pip install pandas pyarrow opencv-python facenet-pytorch librosa \
+#    torch scikit-learn scipy matplotlib kaggle yt-dlp
 
 
-
-
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#I personally ran 
+#python -m venv C:\dfd-env
+#C:\dfd-env\Scripts\Activate.ps1
+#cd "C:\Users\seand\OneDrive - UWA\Machine_Learning_Models_for_Deepfake_Detection_S2_2026\04_Code"
+#pip install pandas pyarrow opencv-python facenet-pytorch librosa torch scikit-learn scipy matplotlib kaggle yt-dlp
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 from dataclasses import dataclass, asdict
 from import json, hashlib, platform, random, subprocess, sys
