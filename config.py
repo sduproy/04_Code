@@ -15,7 +15,7 @@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 from dataclasses import dataclass, asdict
-from import json, hashlib, platform, random, subprocess, sys
+import json, hashlib, platform, random, subprocess, sys
 import numpy as np
 
 @dataclass(frozen=True)
@@ -74,3 +74,8 @@ def run_manifest(stage: str, path: str) -> dict:
     m["git_commit"] = git.stdout.strip() or "not a git repository"
     json.dump(m, open(path, "w"), indent=2)
     return m
+
+
+
+set_seeds()
+m = run_manifest("smoke", "manifest_smoke.json")
