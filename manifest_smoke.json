@@ -1,0 +1,36 @@
+{
+  "stage": "smoke",
+  "config": {
+    "seed": 2026,
+    "data_root": "/kaggle/working",
+    "store_title": "Deepfake Detection S2 2026 Store",
+    "raw_video_root": "03_Data/raw",
+    "frames_fps": 2.0,
+    "face_size": 224,
+    "audio_sr": 16000,
+    "n_mfcc": 20,
+    "train_set": "FakeAVCeleb",
+    "new_benchmarks": [
+      "DF40_subset",
+      "Deepfake_Eval_2024"
+    ],
+    "corpus_name": "EndorsementCorpus_v1",
+    "detector_features": "gbm",
+    "detector_pretrained": "",
+    "op_precision_targets": [
+      0.9,
+      0.95,
+      0.99
+    ],
+    "label_conditions": [
+      "none",
+      "generic_ai",
+      "provenance",
+      "accuracy_disclosed"
+    ],
+    "stimulus_secs": 20
+  },
+  "python": "3.11.9",
+  "packages_sha256": "a97db5a83e23de5d0a7b1230b4352a7e69ae23a1f6de736c0ff9d6b588ee68ac",
+  "git_commit": "f3f21bf7d0388584abe3af1acb7dc92c22b03daa"
+}
