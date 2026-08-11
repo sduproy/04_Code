@@ -3,7 +3,7 @@ import hashlib, time
 import pandas as pd
 
 REQUIRED = ["clip_id", "label", "source_dataset", "origin_url", 
-            "license", "sha265", "identity", "generator", 
+            "licence", "sha256", "identity", "generator", 
             "evidence_url", "date_documented"]
 
 def sha256(path: str) -> str:
@@ -25,15 +25,15 @@ def validate(reg: pd.DataFrame) -> dict:
         n = int((reg[k] == "").sum())
         if n:
             problems.append(f"{k}: {n} empty")
-        fakes = reg[reg["label"] == "fake"]
-        n_ev = int((fakes["evicence_url"] == "").sum())
-        if n_ev:
-            problems.append(f"fakes without evidence: {n_ev}")
-        dup = int(reg["sha256"].duplicated().sum())
-        if dup:
-            problems.append(f"duplicate hashes: {dup}")
-        return {"rows": len(reg), "complete": not problems,
-                "problems": problems}
+    fakes = reg[reg["label"] == "fake"]
+    n_ev = int((fakes["evidence_url"] == "").sum())
+    if n_ev:
+        problems.append(f"fakes without evidence: {n_ev}")
+    dup = int(reg["sha256"].duplicated().sum())
+    if dup:
+        problems.append(f"duplicate hashes: {dup}")
+    return {"rows": len(reg), "complete": not problems,
+            "problems": problems}
 
 def recheck_sample(reg: pd.DataFrame, frac: float = 0.2,
                    seed: int = 2026) -> pd.DataFrame:
