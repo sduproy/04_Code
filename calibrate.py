@@ -9,7 +9,7 @@ def reliability(y, p, bins=10) -> pd.DataFrame:
         m = (p >= lo) & (p < hi)
         if m.sum():
             rows.append({"bin_mid": (lo + hi)/ 2,
-                         "confidence": float(p[m].mean),
+                         "confidence": float(p[m].mean()),
                          "accuracy": float(y[m].mean()),
                          "n": int(m.sum())})
     return pd.DataFrame(rows)
@@ -27,7 +27,7 @@ def fit_temperature(y_val, logit_val, grid=None) -> float:
         p = np.clip(p, 1e-6, 1 - 1e-6)
         return -np.mean(y_val * np.log(p)
         + (1 - y_val) * np.log(1-p))
-    return float(min(grid, key=n11))
+    return float(min(grid, key=nll))
 
 def operating_points(y, p, targets) -> pd.DataFrame:
     """The table the experiment quotes"""
@@ -53,4 +53,4 @@ def operating_points(y, p, targets) -> pd.DataFrame:
                      "miss_rate": float(1 - flag[y == 1].mean()),
                      "false_alarm_rate":
                         float(flag[y==0].mean())})
-        return pd.DataFrame(rows)
+    return pd.DataFrame(rows)
