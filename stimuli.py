@@ -8,11 +8,11 @@ from config import CFG
 
 def standardize(in_path: str, out_path: str) -> None:
     subprocess.run(["ffmpeg", "-y", "-i", in_path,
-                    "t", str(CFG.stimulus_secs),
+                    "-t", str(CFG.stimulus_secs),
                     "-vf", "scale=1280:720:force_original_aspect_ratio="
                     "decrease, pad=1280:720:(ow-iw)/2:(oh-ih)/2",
                     "-af", "loudnorm=I=-16:TP=-1.5:LRA=11",
-                    "-r", "30", "out_path"], check=True)
+                    "-r", "30", out_path], check=True)
 
 def cue_audit(bank: pd.DataFrame) -> pd.DataFrame:
     """Superficial cues must not be seperate real from fake."""
@@ -45,13 +45,13 @@ def overlay(in_path: str, out_path: str, condition: str) -> None:
 def pilot_sheet(bank: pd.DataFrame, rater:str) -> pd.DataFrame:
     """Blind: no labels, no machine scores, shuffled order."""
     s = bank.sample(frac=1.0, random_state=CFG.seed)
-    return pd.DataFrame({"clip_id": s["clip_ip"], "rater":rater,
+    return pd.DataFrame({"clip_id": s["clip_id"], "rater":rater,
                          "realism_0_10": "", "guess_real_fake": ""})
 
 def pilot_agreement(a: pd.DataFrame, b: pd.DataFrame) -> dict:
     j = a.merge(b, on="clip_id", suffixes=("_a", "_b"))
-    kappa = cohen_kappa_score(j["guess_real_fake_a",
-                                j["guess_real_fake_b"]])
+    kappa = cohen_kappa_score(j["guess_real_fake_a"],
+                                j["guess_real_fake_b"])
     rho = spearmanr(j["realism_0_10_a"].astype(float),
                     j["realism_0_10_b"].astype(float)).statistic
     return {"n": len(j), "kappa_guess": float(kappa),

@@ -25,7 +25,7 @@ def register_fake(clip_id, path, origin_url, evidence_url,
                    date_documented=pd.Timestamp.today().date()
                    .isoformat())
 
-def register_real(clip_id, licence, origin_url, identity,
+def register_real(clip_id, path, origin_url, identity,
                   source, licence) -> dict:
     return new_row(clip_id=clip_id, label="real",
                    source_dataset=source, origin_url=origin_url,

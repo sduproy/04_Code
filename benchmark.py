@@ -46,6 +46,6 @@ def run(df_all) -> pd.DataFrame:
         for fam, g in te.groupby("generator"):
             yg = (g["label"] == "fake").astype(int).to_numpy()
             if len(set(yg)) == 2 and len(g) >= 50:
-                rows.append({"test_set": f"{name}:{fam}"},
-                            **_scores(yg, p_fake(model, cols, g)))
+                rows.append({"test_set": f"{name}:{fam}",
+                            **_scores(yg, p_fake(model, cols, g))})
     return pd.DataFrame(rows)
