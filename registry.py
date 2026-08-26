@@ -11,7 +11,7 @@ def sha256(path: str) -> str:
     with open(path, "rb") as f:
         for chunk in iter(lambda: f.read(1 << 20), b""):
             h.update(chunk)
-        return h.hexdigest()
+    return h.hexdigest()
 
 def new_row(**kw) -> dict:
     row = {k: kw.get(k, "") for k in REQUIRED}

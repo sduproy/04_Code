@@ -7,6 +7,8 @@ from facenet_pytorch import MTCNN
 from config import CFG
 
 
+
+
 mtcnn = MTCNN(image_size=CFG.face_size, margin=20,
               post_process=False, keep_all=False)
 
@@ -25,7 +27,7 @@ def frames(video_path: str, out_dir: str) -> list:
         if i % step == 0:
             fp = out / f"{vid}_{i:06d}.jpg"
             cv2.imwrite(str(fp), frame,
-                        [cv2.IMWRITE_JPEG_QUALITY], 92)
+                        [cv2.IMWRITE_JPEG_QUALITY, 92])
             paths.append(str(fp))
         i += 1
     cap.release()
@@ -40,7 +42,7 @@ def visual_stats(frame_paths: list) -> dict:
         b, _ = mtcnn.detect(im[..., ::-1])
         if b is not None and len(b):
             x0, y0, x1, y1 = b[0]
-            boxes.append(((x0 + x1) / 2 (y0 + y1) / 2))
+            boxes.append(((x0 + x1) / 2, (y0 + y1) / 2))
     jitter = (float(np.std(boxes, axis = 0).mean())
               if len(boxes) > 2 else 0.0)
     return {"v_sharpness_mean": float(np.mean(sharp)),

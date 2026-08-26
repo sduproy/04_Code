@@ -25,7 +25,7 @@ class Config:
     store_title: str = "Deepfake Detection S2 2026 Store"
     raw_video_root: str = "03_Data/raw"     #licensed videos live here
     #Frames, faces, audio                   #and never enter the Store
-    frames_fps: float = 2.0
+    frame_fps: float = 2.0
     face_size: int = 224
     audio_sr: int = 16000
     n_mfcc: int = 20
@@ -77,5 +77,5 @@ def run_manifest(stage: str, path: str) -> dict:
 
 
 
-set_seeds()
-m = run_manifest("smoke", "manifest_smoke.json")
+# set_seeds()
+# m = run_manifest("smoke", "manifest_smoke.json")
