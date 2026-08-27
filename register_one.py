@@ -2,7 +2,7 @@ import pathlib
 import pandas as pd
 from collect_wild import register_fake
 
-OUT = pathlib.Path(r"C:\Users\seand\OneDrive - UWA\Machine_Learning_Models_for_Deepfake_Detection_S2_2026\03_Data\corpus_registry.csv")
+OUT = pathlib.Path(r"C:\Users\seand\OneDrive - UWA\Machine_Learning_Models_for_Deepfake_Detection_S2_2026\03_Data\Endorsement corpus\Fake")
 
 row = register_fake(
     clip_id="endo_00070",
