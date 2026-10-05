@@ -1,0 +1,51 @@
+import pathlib
+import pandas as pd
+from registry import new_row, sha256, validate
+
+ROOT = pathlib.Path(r"C:\Users\seand\OneDrive - UWA\Machine_Learning_Models_for_Deepfake_Detection_S2_2026\03_Data\FakeAVCeleb_v1.2\FakeAVCeleb_v1.2")
+REG = pathlib.Path(r"C:\Users\seand\OneDrive - UWA\Machine_Learning_Models_for_Deepfake_Detection_S2_2026\03_Data\registry.csv")
+
+SHORT = {"RealVideo-RealAudio": "rvra", "FakeVideo-RealAudio": "fvra",
+         "RealVideo-FakeAudio": "rvfa", "FakeVideo-FakeAudio": "fvfa"}
+METHODS = ("wavtolip", "wav2lip", "faceswap", "fsgan", "sv2tts", "rtvc")
+
+vids = list(ROOT.rglob("*.mp4"))
+print(len(vids), "files")
+
+rows = []
+for i, p in enumerate(vids):
+    cat = p.relative_to(ROOT).parts[0]
+    label = "real" if cat == "RealVideo-RealAudio" else "fake"
+    if label == "real":
+        gen = "none"
+    else:
+        found = [m for m in METHODS if m in p.stem.lower()]
+        gen = f"{cat}:{'+'.join(found)}" if found else f"{cat}:unspecified"
+    rows.append(new_row(
+        clip_id=f"fav_{SHORT[cat]}_{p.parent.name}_{p.stem}",
+        label=label,
+        source_dataset="FakeAVCeleb",
+        origin_url="https://github.com/DASH-Lab/FakeAVCeleb",
+        licence="research-only; no redistribution; request filed 01_Admin",
+        sha256=sha256(str(p)),
+        identity=f"fav_{p.parent.name}",
+        generator=gen,
+        evidence_url="dataset card: FakeAVCeleb v1.2",
+        date_documented=pd.Timestamp.today().date().isoformat(),
+    ))
+    if i % 2000 == 0:
+        print(i)
+
+new = pd.DataFrame(rows)
+print("unique clip_ids:", new["clip_id"].nunique(), "of", len(new))
+print(new["generator"].value_counts())
+
+old = pd.read_csv(REG, dtype=str, keep_default_na=False) if REG.exists() else pd.DataFrame()
+if len(old):
+    old = old[old["source_dataset"] != "FakeAVCeleb"]
+reg = pd.concat([old, new], ignore_index=True)
+reg.to_csv(REG, index=False)
+print(len(reg), "total rows")
+print(validate(reg))
+
+
