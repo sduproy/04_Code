@@ -85,31 +85,6 @@ def run_manifest(stage: str, path: str) -> dict:
     json.dump(m, open(path, "w"), indent=2)
     return m
 
-def log_compute(script: str, t0: float, used_gpu: bool = False,
-                path: str = None) -> dict:
-    #append one row per run to 05_Outputs/compute_log.csv
-    #t0 = time.perf_counter() taken at the top of the script
-    import csv, datetime, pathlib, time
-    hrs = (time.perf_counter() - t0) / 3600
-    try:
-        import torch
-        gpu = torch.cuda.get_device_name(0) if torch.cuda.is_available() else "none"
-    except ImportError:
-        gpu = "none"
-    row = {"timestamp": datetime.datetime.now().isoformat(timespec="seconds"),
-           "script": script, "wall_hours": round(hrs, 4),
-           "gpu_hours": round(hrs, 4) if used_gpu else 0.0,
-           "gpu_device": gpu, "host": platform.node()}
-    path = pathlib.Path(path or pathlib.Path(__file__).resolve().parent.parent
-                        / "05_Outputs" / "compute_log.csv")
-    new = not path.exists()
-    with open(path, "a", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=list(row))
-        if new: w.writeheader()
-        w.writerow(row)
-    print(f"compute: {row['wall_hours']} h wall, {row['gpu_hours']} GPU-h ({gpu}) -> {path.name}")
-    return row
-
 
 
 # set_seeds()
