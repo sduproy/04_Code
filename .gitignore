@@ -1,0 +1,6 @@
+# Extracted frames / temp data (hundreds of thousands of files)
+frames_tmp/
+
+# Python cache
+__pycache__/
+*.pyc
