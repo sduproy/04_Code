@@ -29,16 +29,26 @@ class Config:
     face_size: int = 224
     audio_sr: int = 16000
     n_mfcc: int = 20
+    audio_crop_secs: float = 3.0            #centred window for crop_audio_feats.py
+    stimulus_fake_rate: float = 0.5         #prevalence of the Stage D stimuli; run_calibrate_5050.py
     #The datasets in play, each under its own licence 
     train_set: str = "FakeAVCeleb"          #the inherited domain
-    new_benchmarks: tuple = ("DF40_subset", "Deepfake_Eval_2024")
+    new_benchmarks: tuple = ("Deepfake_Eval_2024", "DF40_subset")
     corpus_name: str = "EndorsementCorpus_v1"
     #Models
     detector_features: str = "gbm"          #the guaranteed path
-    detector_pretrained: str = ""           #optional checkopint id; if
+    #detector_pretrained: str = ""           #optional checkopint id; if
                                             #set, verify its card first
+    detector_pretrained: str = "XLSR+SLS_MM2024"   #primary audio detector
+    detector_repo: str = "https://github.com/QiShanZhang/SLSforASVspoof-2021-DF"
+    detector_commit: str = "89a09ac4404c5687d96d6c123fcf6db20e4e4b38"
+    detector_sls_sha256: str = "0d315184aa8e6f017ea72c4d2458c11bae8f07fd743fe860a3aa932e36135fa6"
+    detector_xlsr_sha256: str = "b08927597f2c9eb2ebd7dcc3ac78ee4b5f6021cbac4b3a6c5a9deec445d80ed9"
+    detector_licence: str = "SLS repo: no LICENSE/model card; XLS-R front-end: Meta fairseq (terms unverified)"
+
     #The bridge to the experiment
-    op_precision_targets: tuple = (0.90, 0.95, 0.99)
+    #More targets added for completeness
+    op_precision_targets: tuple = (0.70, 0.80, 0.90, 0.95, 0.99)
     label_conditions: tuple = ("none", "generic_ai", "provenance",
                                "accuracy_disclosed")
     stimulus_secs: int = 20
@@ -74,6 +84,31 @@ def run_manifest(stage: str, path: str) -> dict:
     m["git_commit"] = git.stdout.strip() or "not a git repository"
     json.dump(m, open(path, "w"), indent=2)
     return m
+
+def log_compute(script: str, t0: float, used_gpu: bool = False,
+                path: str = None) -> dict:
+    #append one row per run to 05_Outputs/compute_log.csv
+    #t0 = time.perf_counter() taken at the top of the script
+    import csv, datetime, pathlib, time
+    hrs = (time.perf_counter() - t0) / 3600
+    try:
+        import torch
+        gpu = torch.cuda.get_device_name(0) if torch.cuda.is_available() else "none"
+    except ImportError:
+        gpu = "none"
+    row = {"timestamp": datetime.datetime.now().isoformat(timespec="seconds"),
+           "script": script, "wall_hours": round(hrs, 4),
+           "gpu_hours": round(hrs, 4) if used_gpu else 0.0,
+           "gpu_device": gpu, "host": platform.node()}
+    path = pathlib.Path(path or pathlib.Path(__file__).resolve().parent.parent
+                        / "05_Outputs" / "compute_log.csv")
+    new = not path.exists()
+    with open(path, "a", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(row))
+        if new: w.writeheader()
+        w.writerow(row)
+    print(f"compute: {row['wall_hours']} h wall, {row['gpu_hours']} GPU-h ({gpu}) -> {path.name}")
+    return row
 
 
 
