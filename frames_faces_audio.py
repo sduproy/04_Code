@@ -52,6 +52,9 @@ def visual_stats(frame_paths: list) -> dict:
 
 def audio_feats(video_path: str) -> dict:
     y, sr = librosa.load(video_path, sr=CFG.audio_sr, mono=True)
+    return mfcc_feats(y, sr)
+
+def mfcc_feats(y: np.ndarray, sr: int) -> dict:
     if len(y) < sr:
         return {"a_ok": 0}
     m = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=CFG.n_mfcc)
