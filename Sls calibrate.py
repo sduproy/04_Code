@@ -29,8 +29,9 @@ SETS = {
     "FakeAVCeleb":              ("scores_fakeavceleb.csv", "identity"),
     "Deepfake_Eval_2024_audio": ("scores_dfe_audio.csv",   "stratified"),
     "Corpus":                   ("scores_corpus.csv",      "stratified"),  # CHECK filename
+    "Audio_corpus":             ("scores_audio_corpus.csv", "stratified"),
 }
-RUN = list(SETS)        # all three sets
+RUN = list(SETS)        # all sets; missing / one-class sets are skipped in main()
 
 
 def logit(p):
@@ -96,7 +97,11 @@ def main():
     SAVE.mkdir(parents=True, exist_ok=True)
     for name in RUN:
         fname, how = SETS[name]
+        if not (OUTD / fname).exists():
+            print(f"\n== {name}: {fname} missing, skipped"); continue
         df = pd.read_csv(OUTD / fname)
+        if df["label"].nunique() < 2:
+            print(f"\n== {name}: one class only ({len(df)} clips), skipped -- needs reals and fakes"); continue
         print(f"\n== {name}: {len(df)} clips, "
               f"{int((df.label == 1).sum())} fake / {int((df.label == 0).sum())} real")
 

@@ -6,7 +6,8 @@ import pathlib, time, wave
 T0 = time.perf_counter()
 import pandas as pd
 import librosa
-from config import CFG, log_compute
+from config import CFG
+from compute_log import log_compute
 from frames_faces_audio import mfcc_feats
 
 BASE = pathlib.Path(r"C:\Users\seand\OneDrive - UWA\Machine_Learning_Models_for_Deepfake_Detection_S2_2026\03_Data")

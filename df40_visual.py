@@ -6,7 +6,8 @@ import re, time
 T0 = time.perf_counter()
 import pandas as pd
 from sklearn.ensemble import HistGradientBoostingClassifier
-from config import CFG, set_seeds, log_compute
+from config import CFG, set_seeds
+from compute_log import log_compute
 from benchmark import identity_split, _scores
 
 BASE = r"C:\Users\seand\OneDrive - UWA\Machine_Learning_Models_for_Deepfake_Detection_S2_2026\03_Data"

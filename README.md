@@ -36,7 +36,8 @@ These are imported by the scripts; you don't run them directly.
 
 | Module | Role |
 |---|---|
-| `config.py` | Every setting lives in `CFG`: seed, frame rate, MFCC count, dataset names, precision targets, SLS detector provenance. Also has `set_seeds()`, `run_manifest()` and `log_compute()` (appends run time to `05_Outputs/compute_log.csv`). |
+| `config.py` | Every setting lives in `CFG`: seed, frame rate, MFCC count, dataset names, precision targets, SLS detector provenance. Also has `set_seeds()` and `run_manifest()`. |
+| `compute_log.py` | `log_compute(script, T0, used_gpu)` appends one row per run (wall and GPU hours) to `05_Outputs/compute_log.csv`. Python 3.7-safe, so the XLSR+SLS scorers in the SLS env import it too. |
 | `registry.py` | One row per clip, with provenance. `new_row()`, `sha256()`, and `validate()` (the provenance gate: no empty fields, every fake has evidence, no duplicate hashes). |
 | `collect_wild.py` | `register_fake()` / `register_real()` for clips collected by hand, plus the rules for matching reals to fakes. |
 | `frames_faces_audio.py` | Feature extraction, identical for every dataset. `frames()` samples at 2 fps, `visual_stats()` computes the 4 `v_` features (sharpness, face rate, face-box jitter) and `audio_feats()` / `mfcc_feats()` compute 80 `a_` MFCC features. |

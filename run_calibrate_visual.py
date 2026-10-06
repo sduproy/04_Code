@@ -7,7 +7,8 @@ import numpy as np
 import pandas as pd
 from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.model_selection import GroupShuffleSplit
-from config import CFG, set_seeds, log_compute
+from config import CFG, set_seeds
+from compute_log import log_compute
 import calibrate
 
 BASE = r"C:\Users\seand\OneDrive - UWA\Machine_Learning_Models_for_Deepfake_Detection_S2_2026\03_Data"

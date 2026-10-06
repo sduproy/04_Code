@@ -3,7 +3,7 @@ import pathlib, time
 T0 = time.perf_counter()
 import pandas as pd
 from frames_faces_audio import audio_feats
-from config import log_compute
+from compute_log import log_compute
 
 BASE = pathlib.Path(r"C:\Users\seand\OneDrive - UWA\Machine_Learning_Models_for_Deepfake_Detection_S2_2026\03_Data")
 NORM = BASE / "audio_norm"

@@ -3,7 +3,8 @@ import subprocess, json, re, time
 T0 = time.perf_counter()
 import numpy as np, pandas as pd, pathlib
 from scipy.stats import spearmanr
-from config import CFG, set_seeds, log_compute
+from config import CFG, set_seeds
+from compute_log import log_compute
 from detect import train, p_fake
 from benchmark import identity_split
 

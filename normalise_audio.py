@@ -1,7 +1,7 @@
 # normalise_audio.py — loudness-normalise FAV + DFE + corpus audio to a common target
 import subprocess, pathlib, time
 T0 = time.perf_counter()
-from config import log_compute
+from compute_log import log_compute
 
 BASE = pathlib.Path(r"C:\Users\seand\OneDrive - UWA\Machine_Learning_Models_for_Deepfake_Detection_S2_2026\03_Data")
 OUT  = BASE / "audio_norm"; OUT.mkdir(exist_ok=True)
