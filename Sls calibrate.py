@@ -30,6 +30,7 @@ SETS = {
     "Deepfake_Eval_2024_audio": ("scores_dfe_audio.csv",   "stratified"),
     "Corpus":                   ("scores_corpus.csv",      "stratified"),  # CHECK filename
     "Audio_corpus":             ("scores_audio_corpus.csv", "stratified"),
+    "Deepfake_Eval_2024_video": ("scores_dfe_video_audiolabel.csv", "stratified"),  # audio labels; make with relabel_dfe_video.py
 }
 RUN = list(SETS)        # all sets; missing / one-class sets are skipped in main()
 
